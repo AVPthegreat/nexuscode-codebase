@@ -1,0 +1,375 @@
+// Dark mode theme styles
+body.dark-mode {
+  background-color: #0c1222;
+  color: #e0e0e0;
+
+  // Background colors
+  html {
+    background-color: #1a1a1a;
+  }
+
+  // Header
+  #header {
+    background-color: #0f172a !important;
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.5);
+
+    .oj-menu {
+      background: #0f172a !important;
+    }
+
+    .logo {
+      color: #e0e0e0;
+    }
+
+    // iView Menu component overrides
+    .ivu-menu-light {
+      background: #0f172a;
+      color: #e0e0e0;
+    }
+
+    .ivu-menu-item, .ivu-menu-submenu-title {
+      color: #b0b0b0 !important;
+      &:hover {
+        color: #ffffff !important;
+        background-color: #0c1222 !important;
+      }
+    }
+
+    .ivu-menu-item-active, .ivu-menu-item-selected {
+      color: #ceb9f8 !important;
+      border-bottom-color: #7f5cff !important;
+    }
+
+    .ivu-menu-submenu-title-icon {
+      color: #7f5cff !important;
+    }
+
+    // Dropdown menu
+    .drop-menu-title {
+      color: #7f5cff !important;
+    }
+
+    // Buttons
+    .ivu-btn-ghost {
+      color: #7f5cff !important;
+      border-color: #7f5cff !important;
+      &:hover {
+        color: #ffffff !important;
+        border-color: #7dbeff !important;
+        background-color: rgba(92, 173, 255, 0.1) !important;
+      }
+    }
+  }
+
+  // Dropdown menu items
+  .ivu-dropdown-menu {
+    background-color: #ff0000;
+    .ivu-dropdown-item {
+      color: #b0b0b0;
+      &:hover {
+        background-color: #ff0101;
+        color: #ffffff;
+      }
+    }
+  }
+
+  // Cards and Panels
+  .ivu-card {
+    background-color: #0f172a !important;
+    color: #e0e0e0 !important;
+    border-color: #404040 !important;
+  }
+
+  .ivu-card-head {
+    background-color: #333333 !important;
+    color: #e0e0e0 !important;
+    border-bottom-color: #404040 !important;
+  }
+
+  .ivu-card-body {
+    color: #e0e0e0 !important;
+  }
+
+  // Panels (custom component)
+  .panel {
+    background-color: #0f172a;
+    color: #e0e0e0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+
+    .title {
+      border-bottom-color: #404040;
+      color: #e0e0e0;
+    }
+  }
+
+  // Tables
+  .ivu-table {
+    background-color: #0f172a;
+    color: #e0e0e0;
+
+    th {
+      background-color: #333333 !important;
+      color: #e0e0e0 !important;
+      border-bottom-color: #404040;
+    }
+
+    td {
+      background-color: #0f172a !important;
+      color: #e0e0e0 !important;
+      border-bottom-color: #404040;
+    }
+
+    tr:hover td {
+      background-color: #3a3a3a !important;
+    }
+  }
+
+  // Input fields
+  .ivu-input, .ivu-select-selection, .ivu-input-number {
+    background-color: #3a3a3a !important;
+    color: #e0e0e0 !important;
+    border-color: #555555 !important;
+
+    &:hover, &:focus {
+      border-color: #5cadff !important;
+    }
+  }
+
+  .ivu-input::-webkit-input-placeholder {
+    color: #808080;
+  }
+
+  // Buttons
+  .ivu-btn-primary {
+    background-color: #5cadff !important;
+    border-color: #5cadff !important;
+    &:hover {
+      background-color: #7dbeff !important;
+      border-color: #7dbeff !important;
+    }
+  }
+
+  .ivu-btn-default {
+    background-color: #3a3a3a !important;
+    border-color: #555555 !important;
+    color: #e0e0e0 !important;
+    &:hover {
+      background-color: #4a4a4a !important;
+      border-color: #666666 !important;
+    }
+  }
+
+  .ivu-btn-text {
+    color: #5cadff !important;
+    &:hover {
+      color: #7dbeff !important;
+    }
+  }
+
+  // Tags
+  .ivu-tag {
+    background-color: #3a3a3a !important;
+    color: #e0e0e0 !important;
+    border-color: #555555 !important;
+  }
+
+  // Alerts
+  .ivu-alert {
+    &-info {
+      background-color: #2d4a5a;
+      border-color: #3a5f75;
+      color: #a0c5d9;
+    }
+    &-success {
+      background-color: #2d4a35;
+      border-color: #3a6045;
+      color: #a0d9b0;
+    }
+    &-warning {
+      background-color: #5a4a2d;
+      border-color: #756038;
+      color: #d9c5a0;
+    }
+    &-error {
+      background-color: #5a2d2d;
+      border-color: #753a3a;
+      color: #d9a0a0;
+    }
+  }
+
+  // Modals
+  .ivu-modal-content {
+    background-color: #0f172a !important;
+    color: #e0e0e0 !important;
+  }
+
+  .ivu-modal-header {
+    background-color: #333333 !important;
+    border-bottom-color: #404040 !important;
+    color: #e0e0e0 !important;
+  }
+
+  .ivu-modal-close {
+    color: #b0b0b0 !important;
+    &:hover {
+      color: #ffffff !important;
+    }
+  }
+
+  // Pagination
+  .ivu-page {
+    .ivu-page-item {
+      background-color: #3a3a3a;
+      border-color: #555555;
+      a {
+        color: #e0e0e0;
+      }
+      &:hover {
+        background-color: #4a4a4a;
+        border-color: #5cadff;
+      }
+    }
+
+    .ivu-page-item-active {
+      background-color: #5cadff;
+      border-color: #5cadff;
+      a {
+        color: #ffffff;
+      }
+    }
+  }
+
+  // Problem content
+  #problem-content {
+    .title {
+      color: #5cadff !important;
+    }
+
+    p.content {
+      color: #d0d0d0;
+    }
+
+    pre {
+      background-color: #1a1a1a !important;
+      border-color: #404040 !important;
+      color: #e0e0e0 !important;
+    }
+  }
+
+  // Code Mirror (code editor)
+  .CodeMirror {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+  }
+
+  // Info card
+  #info {
+    ul li {
+      border-bottom-color: #404040;
+      color: #e0e0e0;
+    }
+  }
+
+  // Footer
+  .footer {
+    color: #b0b0b0;
+    a {
+      color: #5cadff;
+      &:hover {
+        color: #7dbeff;
+      }
+    }
+  }
+
+  // Links
+  a {
+    color: #5cadff;
+    &:hover {
+      color: #7dbeff;
+    }
+  }
+
+  a.emphasis {
+    color: #e0e0e0;
+    &:hover {
+      color: #5cadff;
+    }
+  }
+
+  // Select dropdown
+  .ivu-select-dropdown {
+    background-color: #0f172a;
+    border-color: #555555;
+
+    .ivu-select-item {
+      color: #e0e0e0;
+      &:hover {
+        background-color: #3a3a3a;
+      }
+    }
+
+    .ivu-select-item-selected {
+      background-color: #3a3a3a;
+      color: #5cadff;
+    }
+  }
+
+  // Poptip
+  .ivu-poptip-body {
+    background-color: #0f172a;
+    color: #e0e0e0;
+  }
+
+  .ivu-poptip-arrow {
+    border-color: #0f172a transparent transparent transparent;
+  }
+
+  // Markdown body
+  .markdown-body {
+    color: #e0e0e0;
+
+    h1, h2, h3, h4, h5, h6 {
+      color: #e0e0e0;
+      border-bottom-color: #404040;
+    }
+
+    code {
+      background-color: #1a1a1a;
+      color: #f08080;
+    }
+
+    blockquote {
+      color: #b0b0b0;
+      border-left-color: #555555;
+    }
+
+    hr {
+      background-color: #404040;
+    }
+
+    table {
+      tr {
+        background-color: #0f172a;
+        border-top-color: #404040;
+      }
+      th, td {
+        border-color: #404040;
+      }
+    }
+  }
+
+  // Spin (loading indicator)
+  .ivu-spin-fix {
+    background-color: rgba(26, 26, 26, 0.9);
+  }
+
+  // Tooltip
+  .ivu-tooltip-inner {
+    background-color: #0f172a;
+    color: #e0e0e0;
+  }
+
+  .ivu-tooltip-arrow {
+    border-color: #0f172a transparent transparent transparent;
+  }
+}
