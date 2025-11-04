@@ -1,0 +1,90 @@
+services:
+  postgres:
+    image: postgres:10-alpine
+    container_name: oj-postgres
+    restart: always
+    volumes:
+      - ./OnlineJudge/data/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=onlinejudge
+      - POSTGRES_USER=onlinejudge
+      - POSTGRES_PASSWORD=onlinejudge
+    ports:
+      - "5432:5432"
+    networks:
+      - oj-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U onlinejudge"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:4.0-alpine
+    container_name: oj-redis
+    restart: always
+    volumes:
+      - ./OnlineJudge/data/redis:/data
+    networks:
+      - oj-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    image: registry.cn-hangzhou.aliyuncs.com/onlinejudge/oj_backend
+    platform: linux/amd64
+    container_name: oj-backend
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./OnlineJudge/data/backend:/data
+      - ./OnlineJudge/data/test_case:/test_case
+      - ./OnlineJudge/data/log:/log
+    environment:
+      - POSTGRES_DB=onlinejudge
+      - POSTGRES_USER=onlinejudge
+      - POSTGRES_PASSWORD=onlinejudge
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JUDGE_SERVER_TOKEN=CHANGE_THIS
+    ports:
+      - "8000:8000"
+    networks:
+      - oj-network
+
+  judge-server:
+    image: oj-judge-server:local
+    container_name: oj-judge-server
+    restart: always
+    depends_on:
+      backend:
+        condition: service_started
+    volumes:
+      - ./OnlineJudge/data/backend/test_case:/test_case:ro
+      - ./OnlineJudge/data/log:/log
+    environment:
+      - SERVICE_URL=http://judge-server:8080
+      - BACKEND_URL=http://backend:8000/api/judge_server_heartbeat/
+      - TOKEN=CHANGE_THIS
+    ports:
+      - "12358:8080"
+    security_opt:
+      - seccomp:unconfined
+    cap_add:
+      - SYS_PTRACE
+    privileged: true
+    networks:
+      - oj-network
+
+networks:
+  oj-network:
+    driver: bridge

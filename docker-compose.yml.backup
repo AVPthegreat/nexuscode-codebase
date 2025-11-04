@@ -1,0 +1,98 @@
+services:
+  postgres:
+    image: postgres:10-alpine
+    container_name: oj-postgres
+    restart: always
+    volumes:
+      - ./OnlineJudge/data/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=onlinejudge
+      - POSTGRES_USER=onlinejudge
+      - POSTGRES_PASSWORD=onlinejudge
+    ports:
+      - "5432:5432"
+    networks:
+      - oj-network
+
+  redis:
+    image: redis:4.0-alpine
+    container_name: oj-redis
+    restart: always
+    volumes:
+      - ./OnlineJudge/data/redis:/data
+    networks:
+      - oj-network
+
+  backend:
+    image: registry.cn-hangzhou.aliyuncs.com/onlinejudge/oj_backend
+    container_name: oj-backend
+    restart: always
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./OnlineJudge/data/backend:/data
+      - ./OnlineJudge/data/test_case:/test_case
+      - ./OnlineJudge/data/log:/log
+    environment:
+      - POSTGRES_DB=onlinejudge
+      - POSTGRES_USER=onlinejudge
+      - POSTGRES_PASSWORD=onlinejudge
+      - REDIS_HOST=redis
+      - JUDGE_SERVER_TOKEN=CHANGE_THIS
+    ports:
+      - "8000:8000"
+    networks:
+      - oj-network
+
+  judge-server:
+    image: registry.cn-hangzhou.aliyuncs.com/onlinejudge/judge_server
+    container_name: oj-judge-server
+    restart: always
+    depends_on:
+      - backend
+    volumes:
+      - ./OnlineJudge/data/backend:/test_case:ro
+      - ./OnlineJudge/data/log:/log
+    environment:
+      - SERVICE_URL=http://backend:8000
+      - BACKEND_URL=http://backend:8000/api/judge_server_heartbeat/
+      - TOKEN=CHANGE_THIS
+    ports:
+      - "12358:8080"
+    networks:
+      - oj-network
+
+  landing-page:
+    build:
+      context: ./v1-landing
+      dockerfile: Dockerfile
+    container_name: landing-page
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - ONLINE_JUDGE_URL=http://localhost:8000
+      - NEXT_TELEMETRY_DISABLED=1
+    networks:
+      - oj-network
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  oj-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:
+  backend-data:
+  test-case:
+  log:
