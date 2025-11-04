@@ -1,12 +1,12 @@
 // Dark mode theme styles
-body.dark-mode {
-  background-color: #0c1222;
-  color: #e0e0e0;
+html.dark-mode {
+  background-color: #0c1222 !important;
+  color: #eee !important;
+}
 
-  // Background colors
-  html {
-    background-color: #1a1a1a;
-  }
+body.dark-mode {
+  background-color: #0c1222 !important;
+  color: #eee;
 
   // Header
   #header {
@@ -18,20 +18,21 @@ body.dark-mode {
     }
 
     .logo {
-      color: #e0e0e0;
+      color: #eee;
     }
 
     // iView Menu component overrides
     .ivu-menu-light {
       background: #0f172a;
-      color: #e0e0e0;
+      color: #eee;
     }
 
     .ivu-menu-item, .ivu-menu-submenu-title {
       color: #b0b0b0 !important;
       &:hover {
         color: #ffffff !important;
-        background-color: #0c1222 !important;
+        background-color: #0f172a !important;
+        border-color: #0c1222 !important;
       }
     }
 
@@ -55,20 +56,21 @@ body.dark-mode {
       border-color: #7f5cff !important;
       &:hover {
         color: #ffffff !important;
-        border-color: #7dbeff !important;
-        background-color: rgba(92, 173, 255, 0.1) !important;
+        background-color: #0f172a !important;
+        border-color: #0c1222 !important;
       }
     }
   }
 
   // Dropdown menu items
   .ivu-dropdown-menu {
-    background-color: #ff0000;
+    background-color: #7f5cff;
     .ivu-dropdown-item {
-      color: #b0b0b0;
+      color: #ffffff;
       &:hover {
-        background-color: #ff0101;
-        color: #ffffff;
+        color: #ffffff !important;
+        background-color: #0f172a !important;
+        border-color: #0c1222 !important;
       }
     }
   }
@@ -76,100 +78,109 @@ body.dark-mode {
   // Cards and Panels
   .ivu-card {
     background-color: #0f172a !important;
-    color: #e0e0e0 !important;
+    color: #eee !important;
     border-color: #404040 !important;
   }
 
   .ivu-card-head {
-    background-color: #333333 !important;
-    color: #e0e0e0 !important;
+    background-color: #0f172a !important;
+    color: #eee !important;
     border-bottom-color: #404040 !important;
   }
 
   .ivu-card-body {
-    color: #e0e0e0 !important;
+    color: #eee !important;
   }
 
   // Panels (custom component)
   .panel {
     background-color: #0f172a;
-    color: #e0e0e0;
+    color: #eee;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 
     .title {
       border-bottom-color: #404040;
-      color: #e0e0e0;
+      color: #eee;
     }
   }
 
   // Tables
   .ivu-table {
     background-color: #0f172a;
-    color: #e0e0e0;
+    color: #eee;
 
     th {
-      background-color: #333333 !important;
-      color: #e0e0e0 !important;
-      border-bottom-color: #404040;
+      background-color: #0c1222 !important;
+      color: #eee !important;
+      border-bottom-color: #0f172a;
     }
 
     td {
       background-color: #0f172a !important;
-      color: #e0e0e0 !important;
-      border-bottom-color: #404040;
+      color: #eee !important;
+      border-bottom-color: #0c1222;
     }
 
     tr:hover td {
-      background-color: #3a3a3a !important;
+      color: #ffffff !important;
+      background-color: #0f172a !important;
+      border-color: #0c1222 !important;
     }
   }
 
   // Input fields
   .ivu-input, .ivu-select-selection, .ivu-input-number {
-    background-color: #3a3a3a !important;
-    color: #e0e0e0 !important;
-    border-color: #555555 !important;
+    background-color: #0c1222 !important;
+    color: #eee !important;
+    border-color: #070b14 !important;
 
     &:hover, &:focus {
-      border-color: #5cadff !important;
+      color: #ffffff !important;
+      background-color: #0f172a !important;
+      border-color: #0c1222 !important;
     }
   }
 
   .ivu-input::-webkit-input-placeholder {
-    color: #808080;
+    color: #eee;
   }
 
   // Buttons
   .ivu-btn-primary {
-    background-color: #5cadff !important;
-    border-color: #5cadff !important;
+    background-color: #0f172a !important;
+    border-color: #0c1222 !important;
+    color: #eee !important;
     &:hover {
-      background-color: #7dbeff !important;
-      border-color: #7dbeff !important;
+      color: #ffffff !important;
+      background-color: #0f172a !important;
+      border-color: #0c1222 !important;
     }
   }
 
   .ivu-btn-default {
-    background-color: #3a3a3a !important;
-    border-color: #555555 !important;
-    color: #e0e0e0 !important;
+    background-color: #0c1222 !important;
+    border-color: #070b14 !important;
+    color: #eee !important;
     &:hover {
-      background-color: #4a4a4a !important;
-      border-color: #666666 !important;
+      color: #ffffff !important;
+      background-color: #0f172a !important;
+      border-color: #0c1222 !important;
     }
   }
 
   .ivu-btn-text {
     color: #5cadff !important;
     &:hover {
-      color: #7dbeff !important;
+      color: #ffffff !important;
+      background-color: #0f172a !important;
+      border-color: #0c1222 !important;
     }
   }
 
   // Tags
   .ivu-tag {
     background-color: #3a3a3a !important;
-    color: #e0e0e0 !important;
+    color: #eee !important;
     border-color: #555555 !important;
   }
 
@@ -200,19 +211,21 @@ body.dark-mode {
   // Modals
   .ivu-modal-content {
     background-color: #0f172a !important;
-    color: #e0e0e0 !important;
+    color: #eee !important;
   }
 
   .ivu-modal-header {
     background-color: #333333 !important;
     border-bottom-color: #404040 !important;
-    color: #e0e0e0 !important;
+    color: #eee !important;
   }
 
   .ivu-modal-close {
     color: #b0b0b0 !important;
     &:hover {
       color: #ffffff !important;
+      background-color: #0f172a !important;
+      border-color: #0c1222 !important;
     }
   }
 
@@ -222,11 +235,15 @@ body.dark-mode {
       background-color: #3a3a3a;
       border-color: #555555;
       a {
-        color: #e0e0e0;
+        color: #eee;
       }
       &:hover {
-        background-color: #4a4a4a;
-        border-color: #5cadff;
+        color: #ffffff !important;
+        background-color: #0f172a !important;
+        border-color: #0c1222 !important;
+        a {
+          color: #ffffff !important;
+        }
       }
     }
 
@@ -252,21 +269,21 @@ body.dark-mode {
     pre {
       background-color: #1a1a1a !important;
       border-color: #404040 !important;
-      color: #e0e0e0 !important;
+      color: #eee !important;
     }
   }
 
   // Code Mirror (code editor)
   .CodeMirror {
     background-color: #1e1e1e;
-    color: #e0e0e0;
+    color: #eee;
   }
 
   // Info card
   #info {
     ul li {
       border-bottom-color: #404040;
-      color: #e0e0e0;
+      color: #eee;
     }
   }
 
@@ -276,7 +293,9 @@ body.dark-mode {
     a {
       color: #5cadff;
       &:hover {
-        color: #7dbeff;
+        color: #ffffff !important;
+        background-color: #0f172a !important;
+        border-color: #0c1222 !important;
       }
     }
   }
@@ -285,14 +304,18 @@ body.dark-mode {
   a {
     color: #5cadff;
     &:hover {
-      color: #7dbeff;
+      color: #ffffff !important;
+      background-color: #0f172a !important;
+      border-color: #0c1222 !important;
     }
   }
 
   a.emphasis {
-    color: #e0e0e0;
+    color: #5cadff;
     &:hover {
-      color: #5cadff;
+      color: #ffffff !important;
+      background-color: #0f172a !important;
+      border-color: #0c1222 !important;
     }
   }
 
@@ -302,9 +325,11 @@ body.dark-mode {
     border-color: #555555;
 
     .ivu-select-item {
-      color: #e0e0e0;
+      color: #eee;
       &:hover {
-        background-color: #3a3a3a;
+        color: #ffffff !important;
+        background-color: #0f172a !important;
+        border-color: #0c1222 !important;
       }
     }
 
@@ -317,7 +342,7 @@ body.dark-mode {
   // Poptip
   .ivu-poptip-body {
     background-color: #0f172a;
-    color: #e0e0e0;
+    color: #eee;
   }
 
   .ivu-poptip-arrow {
@@ -326,10 +351,10 @@ body.dark-mode {
 
   // Markdown body
   .markdown-body {
-    color: #e0e0e0;
+    color: #eee;
 
     h1, h2, h3, h4, h5, h6 {
-      color: #e0e0e0;
+      color: #eee;
       border-bottom-color: #404040;
     }
 
@@ -366,7 +391,7 @@ body.dark-mode {
   // Tooltip
   .ivu-tooltip-inner {
     background-color: #0f172a;
-    color: #e0e0e0;
+    color: #eee;
   }
 
   .ivu-tooltip-arrow {

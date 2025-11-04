@@ -18,30 +18,32 @@
         <Icon type="ios-pulse-strong"></Icon>
         {{$t('m.NavStatus')}}
       </Menu-item>
-      <Submenu name="rank">
-        <template slot="title">
-          <Icon type="podium"></Icon>
-          {{$t('m.Rank')}}
-        </template>
-        <Menu-item name="/acm-rank">
-          {{$t('m.ACM_Rank')}}
-        </Menu-item>
-        <Menu-item name="/oi-rank">
-          {{$t('m.OI_Rank')}}
-        </Menu-item>
-      </Submenu>
-      <Submenu name="about">
-        <template slot="title">
-          <Icon type="information-circled"></Icon>
-          {{$t('m.About')}}
-        </template>
-        <Menu-item name="/about">
-          {{$t('m.Judger')}}
-        </Menu-item>
-        <Menu-item name="/FAQ">
-          {{$t('m.FAQ')}}
-        </Menu-item>
-      </Submenu>
+      <template v-if="isAdminRole">
+        <Submenu name="rank">
+          <template slot="title">
+            <Icon type="podium"></Icon>
+            {{$t('m.Rank')}}
+          </template>
+          <Menu-item name="/acm-rank">
+            {{$t('m.ACM_Rank')}}
+          </Menu-item>
+          <Menu-item name="/oi-rank">
+            {{$t('m.OI_Rank')}}
+          </Menu-item>
+        </Submenu>
+        <Submenu name="about">
+          <template slot="title">
+            <Icon type="information-circled"></Icon>
+            {{$t('m.About')}}
+          </template>
+          <Menu-item name="/about">
+            {{$t('m.Judger')}}
+          </Menu-item>
+          <Menu-item name="/FAQ">
+            {{$t('m.FAQ')}}
+          </Menu-item>
+        </Submenu>
+      </template>
       <template v-if="!isAuthenticated">
         <div class="btn-menu">
           <Button type="ghost"
@@ -115,6 +117,7 @@
       const savedTheme = localStorage.getItem('theme')
       if (savedTheme === 'dark') {
         this.isDarkMode = true
+        document.documentElement.classList.add('dark-mode')
         document.body.classList.add('dark-mode')
       }
     },
@@ -136,9 +139,11 @@
       toggleTheme () {
         this.isDarkMode = !this.isDarkMode
         if (this.isDarkMode) {
+          document.documentElement.classList.add('dark-mode')
           document.body.classList.add('dark-mode')
           localStorage.setItem('theme', 'dark')
         } else {
+          document.documentElement.classList.remove('dark-mode')
           document.body.classList.remove('dark-mode')
           localStorage.setItem('theme', 'light')
         }
