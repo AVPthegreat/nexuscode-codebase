@@ -28,6 +28,12 @@ export default [
     component: Home
   },
   {
+    name: 'discussion-list',
+    path: '/discussions',
+    meta: {title: 'Discussions'},
+    component: () => import(/* webpackChunkName: "discussion" */ '@oj/views/discussion/DiscussionList.vue')
+  },
+  {
     name: 'logout',
     path: '/logout',
     meta: {title: 'Logout'},

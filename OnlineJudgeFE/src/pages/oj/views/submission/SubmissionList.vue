@@ -82,6 +82,11 @@
                   },
                   on: {
                     click: () => {
+                      // Prevent viewing submission details during active contest lock
+                      if (this.$store.state.contest && this.$store.state.contest.started) {
+                        this.$Message.warning('Viewing submission details is disabled during contest')
+                        return
+                      }
                       this.$router.push('/status/' + params.row.id)
                     }
                   }

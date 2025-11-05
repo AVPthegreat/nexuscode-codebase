@@ -275,6 +275,13 @@ export default {
     return ajax('admin/contest/acm_helper', 'put', {
       data
     })
+  },
+  // Discussions
+  getDiscussions (params = {}) {
+    return ajax('discussion', 'get', { params })
+  },
+  createDiscussion (data) {
+    return ajax('discussion', 'post', { data })
   }
 }
 

@@ -18,6 +18,9 @@
                   <span id="countdown">{{countdown}}</span>
                 </Tag>
               </div>
+              <Alert v-if="contestStarted" type="success" show-icon style="margin-bottom: 10px;">
+                Proctoring enabled: Fullscreen is required during the contest.
+              </Alert>
               <div v-html="contest.description" class="markdown-body"></div>
               <div v-if="passwordFormVisible" class="contest-password">
                 <Input v-model="contestPassword" type="password"
@@ -25,8 +28,14 @@
                        @on-enter="checkPassword"/>
                 <Button type="info" @click="checkPassword">Enter</Button>
               </div>
+              <div style="margin-top: 12px;" v-if="!contestStarted">
+                <Button type="primary" icon="play" @click="handleStartContest">Start Contest</Button>
+              </div>
             </Panel>
-            <Table :columns="columns" :data="contest_table" disabled-hover style="margin-bottom: 40px;"></Table>
+            <Table :columns="columns" :data="contest_table" disabled-hover style="margin-bottom: 12px;"></Table>
+            <Alert v-if="contestStarted && !isFullscreen" type="warning" show-icon>
+              You exited full screen during contest. Please return to full screen. Warning {{ fullscreenExitCount }}/5
+            </Alert>
           </div>
         </template>
       </div>
@@ -102,10 +111,51 @@
         }
       })
     },
+    beforeDestroy () {
+      clearInterval(this.timer)
+      document.removeEventListener('fullscreenchange', this.onFullscreenChange)
+      this.$store.commit(types.CLEAR_CONTEST)
+    },
     methods: {
       ...mapActions(['changeDomTitle']),
       handleRoute (route) {
         this.$router.push(route)
+      },
+      handleStartContest () {
+        this.$Modal.confirm({
+          title: 'Start Contest',
+          content: 'You will not be able to access other parts until you submit the contest. Are you sure to start?',
+          onOk: () => {
+            this.$store.commit(types.CONTEST_SET_STARTED, {started: true, resetCount: true})
+            const el = document.documentElement
+            if (el.requestFullscreen) {
+              el.requestFullscreen()
+            } else if (el.webkitRequestFullscreen) {
+              el.webkitRequestFullscreen()
+            } else if (el.mozRequestFullScreen) {
+              el.mozRequestFullScreen()
+            } else if (el.msRequestFullscreen) {
+              el.msRequestFullscreen()
+            }
+            this.$Modal.success({ title: 'All the best!', content: 'Contest started.' })
+            this.$router.push({ name: 'contest-problem-list', params: { contestID: this.contestID } })
+            document.addEventListener('fullscreenchange', this.onFullscreenChange)
+            document.addEventListener('webkitfullscreenchange', this.onFullscreenChange)
+            document.addEventListener('mozfullscreenchange', this.onFullscreenChange)
+            document.addEventListener('MSFullscreenChange', this.onFullscreenChange)
+          }
+        })
+      },
+      onFullscreenChange () {
+        const fs = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement
+        if (!fs && this.contestStarted) {
+          this.$store.commit(types.CONTEST_INCREMENT_FULLSCREEN_EXIT)
+          if (this.fullscreenExitCount >= 5) {
+            this.$Modal.warning({ title: 'Contest submitted', content: 'You exited full screen 5 times. Submitting contest.' })
+            this.$store.commit(types.CONTEST_RESET_LOCK)
+            this.$router.push({ name: 'contest-details', params: { contestID: this.contestID } })
+          }
+        }
       },
       checkPassword () {
         if (this.contestPassword === '') {
@@ -133,6 +183,9 @@
         ['contestMenuDisabled', 'contestRuleType', 'contestStatus', 'countdown', 'isContestAdmin',
           'OIContestRealTimePermission', 'passwordFormVisible']
       ),
+      contestStarted () { return this.$store.state.contest.started },
+      fullscreenExitCount () { return this.$store.state.contest.fullscreenExitCount },
+      isFullscreen () { return !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) },
       countdownColor () {
         if (this.contestStatus) {
           return CONTEST_STATUS_REVERSE[this.contestStatus].color
@@ -148,10 +201,6 @@
         this.contestID = newVal.params.contestID
         this.changeDomTitle({title: this.contest.title})
       }
-    },
-    beforeDestroy () {
-      clearInterval(this.timer)
-      this.$store.commit(types.CLEAR_CONTEST)
     }
   }
 </script>
@@ -160,7 +209,6 @@
   pre {
     display: inline-block;
   }
-
   #countdown {
     font-size: 16px;
   }

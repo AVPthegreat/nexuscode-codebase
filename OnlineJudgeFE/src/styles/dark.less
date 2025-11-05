@@ -109,6 +109,18 @@ body.dark-mode {
     background-color: #0f172a;
     color: #eee;
 
+    // iView adds 1px helper lines via pseudo-elements; match background to hide them in dark mode
+    &:before,
+    &:after {
+      background-color: #0f172a !important;
+    }
+
+    // Ensure table header/body inherit dark background (prevents light seams)
+    .ivu-table-header,
+    .ivu-table-body {
+      background-color: #0f172a !important;
+    }
+
     th {
       background-color: #0c1222 !important;
       color: #eee !important;
@@ -375,6 +387,15 @@ body.dark-mode {
       }
       th, td {
         border-color: #404040;
+      }
+    }
+  }
+
+  // Contest list card tweaks (OJ ContestList.vue)
+  .contest-card {
+    .title {
+      a.entry {
+        color: #ffffff !important;
       }
     }
   }

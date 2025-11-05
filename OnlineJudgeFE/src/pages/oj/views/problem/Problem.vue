@@ -121,90 +121,95 @@
       </Card>
     </div>
 
+
     <div id="right-column">
-      <VerticalMenu @on-click="handleRoute">
-        <template v-if="this.contestID">
-          <VerticalMenu-item :route="{name: 'contest-problem-list', params: {contestID: contestID}}">
-            <Icon type="ios-photos"></Icon>
-            {{$t('m.Problems')}}
-          </VerticalMenu-item>
+      <div class="toggle-buttons grid-2x2">
+        <Button class="toggle-btn" :type="activePanel==='info' ? 'primary' : 'default'" @click="activePanel='info'">
+          <Icon type="information-circled" /> {{$t('m.Information')}}
+        </Button>
+        <Button class="toggle-btn" type="default" @click="goToSubmissions">
+          <Icon type="navicon-round" /> {{$t('m.Submissions')}}
+        </Button>
+        <Button class="toggle-btn" :type="activePanel==='statistics' ? 'primary' : 'default'" @click="activePanel='statistics'">
+          <Icon type="ios-analytics" /> {{$t('m.Statistic')}}
+        </Button>
+        <Button class="toggle-btn" :disabled="contestStarted" :type="activePanel==='discussion' ? 'primary' : 'default'" @click="activePanel='discussion'">
+          <Icon type="chatbubble-working" /> Discussion
+        </Button>
+      </div>
 
-          <VerticalMenu-item :route="{name: 'contest-announcement-list', params: {contestID: contestID}}">
-            <Icon type="chatbubble-working"></Icon>
-            {{$t('m.Announcements')}}
-          </VerticalMenu-item>
-        </template>
+      <div v-show="activePanel==='info'">
+        <Card id="info">
+          <div slot="title" class="header">
+            <Icon type="information-circled"></Icon>
+            <span class="card-title">{{$t('m.Information')}}</span>
+          </div>
+          <ul>
+            <li><p>ID</p>
+              <p>{{problem._id}}</p></li>
+            <li>
+              <p>{{$t('m.Time_Limit')}}</p>
+              <p>{{problem.time_limit}}MS</p></li>
+            <li>
+              <p>{{$t('m.Memory_Limit')}}</p>
+              <p>{{problem.memory_limit}}MB</p></li>
+            <li>
+              <p>{{$t('m.IOMode')}}</p>
+              <p>{{problem.io_mode.io_mode}}</p>
+            </li>
+            <li>
+              <p>{{$t('m.Created')}}</p>
+              <p>{{problem.created_by.username}}</p></li>
+            <li v-if="problem.difficulty">
+              <p>{{$t('m.Level')}}</p>
+              <p>{{$t('m.' + problem.difficulty)}}</p></li>
+            <li v-if="problem.total_score">
+              <p>{{$t('m.Score')}}</p>
+              <p>{{problem.total_score}}</p>
+            </li>
+            <li>
+              <p>{{$t('m.Tags')}}</p>
+              <p>
+                <Poptip trigger="hover" placement="left-end">
+                  <a>{{$t('m.Show')}}</a>
+                  <div slot="content">
+                    <Tag v-for="tag in problem.tags" :key="tag">{{tag}}</Tag>
+                  </div>
+                </Poptip>
+              </p>
+            </li>
+          </ul>
+        </Card>
+      </div>
 
-        <VerticalMenu-item v-if="!this.contestID || OIContestRealTimePermission" :route="submissionRoute">
-          <Icon type="navicon-round"></Icon>
-           {{$t('m.Submissions')}}
-        </VerticalMenu-item>
+      
 
-        <template v-if="this.contestID">
-          <VerticalMenu-item v-if="!this.contestID || OIContestRealTimePermission"
-                             :route="{name: 'contest-rank', params: {contestID: contestID}}">
-            <Icon type="stats-bars"></Icon>
-            {{$t('m.Rankings')}}
-          </VerticalMenu-item>
-          <VerticalMenu-item :route="{name: 'contest-details', params: {contestID: contestID}}">
-            <Icon type="home"></Icon>
-            {{$t('m.View_Contest')}}
-          </VerticalMenu-item>
-        </template>
-      </VerticalMenu>
+      <div v-show="activePanel==='statistics'">
+        <Card id="pieChart" :padding="0" v-if="!this.contestID || OIContestRealTimePermission">
+          <div slot="title">
+            <Icon type="ios-analytics"></Icon>
+            <span class="card-title">{{$t('m.Statistic')}}</span>
+            <Button type="ghost" size="small" id="detail" @click="graphVisible = !graphVisible">Details</Button>
+          </div>
+          <div class="echarts">
+            <ECharts :options="pie"></ECharts>
+          </div>
+        </Card>
+      </div>
 
-      <Card id="info">
-        <div slot="title" class="header">
-          <Icon type="information-circled"></Icon>
-          <span class="card-title">{{$t('m.Information')}}</span>
-        </div>
-        <ul>
-          <li><p>ID</p>
-            <p>{{problem._id}}</p></li>
-          <li>
-            <p>{{$t('m.Time_Limit')}}</p>
-            <p>{{problem.time_limit}}MS</p></li>
-          <li>
-            <p>{{$t('m.Memory_Limit')}}</p>
-            <p>{{problem.memory_limit}}MB</p></li>
-          <li>
-            <p>{{$t('m.IOMode')}}</p>
-            <p>{{problem.io_mode.io_mode}}</p>
-          </li>
-          <li>
-            <p>{{$t('m.Created')}}</p>
-            <p>{{problem.created_by.username}}</p></li>
-          <li v-if="problem.difficulty">
-            <p>{{$t('m.Level')}}</p>
-            <p>{{$t('m.' + problem.difficulty)}}</p></li>
-          <li v-if="problem.total_score">
-            <p>{{$t('m.Score')}}</p>
-            <p>{{problem.total_score}}</p>
-          </li>
-          <li>
-            <p>{{$t('m.Tags')}}</p>
-            <p>
-              <Poptip trigger="hover" placement="left-end">
-                <a>{{$t('m.Show')}}</a>
-                <div slot="content">
-                  <Tag v-for="tag in problem.tags" :key="tag">{{tag}}</Tag>
-                </div>
-              </Poptip>
-            </p>
-          </li>
-        </ul>
-      </Card>
-
-      <Card id="pieChart" :padding="0" v-if="!this.contestID || OIContestRealTimePermission">
-        <div slot="title">
-          <Icon type="ios-analytics"></Icon>
-          <span class="card-title">{{$t('m.Statistic')}}</span>
-          <Button type="ghost" size="small" id="detail" @click="graphVisible = !graphVisible">Details</Button>
-        </div>
-        <div class="echarts">
-          <ECharts :options="pie"></ECharts>
-        </div>
-      </Card>
+      <div v-show="activePanel==='discussion'">
+        <Card>
+          <div slot="title">
+            <Icon type="chatbubble-working" /> Discussion
+          </div>
+          <div>
+            <Input v-model="discussionMessage" type="textarea" :rows="4" :maxlength="500" placeholder="Ask for help or report an issue..." />
+            <div style="margin-top: 10px; text-align: right;">
+              <Button type="primary" :disabled="!discussionMessage.trim() || contestStarted" @click="sendDiscussion">Send</Button>
+            </div>
+          </div>
+        </Card>
+      </div>
     </div>
 
     <Modal v-model="graphVisible">
@@ -278,7 +283,9 @@
         },
         editorial: null,
         editorialLoading: false,
-        editorialError: null
+        editorialError: null,
+        activePanel: 'info', // default panel
+        discussionMessage: ''
       }
     },
     beforeRouteEnter (to, from, next) {
@@ -299,6 +306,26 @@
     },
     methods: {
       ...mapActions(['changeDomTitle']),
+      sendDiscussion () {
+        const msg = this.discussionMessage.trim()
+        if (!msg) { return }
+        if (!this.$store.getters.isAuthenticated) {
+          this.$Message.warning('Please login to post a discussion message')
+          this.$store.dispatch('changeModalStatus', { mode: 'login', visible: true })
+          return
+        }
+        const payload = { problem_id: this.problemID, message: msg }
+        api.createDiscussion(payload).then(() => {
+          this.$Message.success('Message sent')
+          this.discussionMessage = ''
+        }).catch((err) => {
+          const msg = (err && err.data && err.data.data) || 'Failed to send message'
+          this.$Message.error(msg)
+        })
+      },
+      goToSubmissions () {
+        this.$router.push(this.submissionRoute)
+      },
       init () {
         this.$Loading.start()
         this.contestID = this.$route.params.contestID
@@ -510,6 +537,7 @@
     },
     computed: {
       ...mapGetters(['problemSubmitDisabled', 'contestRuleType', 'OIContestRealTimePermission', 'contestStatus']),
+      contestStarted () { return this.$store.state.contest.started },
       contest () {
         return this.$store.state.contest.contest
       },
@@ -523,6 +551,7 @@
         }
       },
       submissionRoute () {
+        // Always pass the selected problemID for submissions
         if (this.contestID) {
           return {name: 'contest-submission-list', query: {problemID: this.problemID}}
         } else {
@@ -563,6 +592,11 @@
     #right-column {
       flex: none;
       width: 220px;
+      position: sticky;
+      top: 90px; // keep entire right column fixed under navbar
+      align-self: flex-start;
+      max-height: calc(100vh - 100px);
+      overflow: auto;
     }
   }
 
@@ -664,6 +698,22 @@
     margin-top: 20px;
     width: 500px;
     height: 480px;
+  }
+
+  /* Toggle buttons layout: 2x2 grid and spacing to content (gap before dropdowns/sections) */
+  .toggle-buttons {
+    margin-bottom: 20px; /* gap between buttons and the panels below */
+    /* no need sticky here since whole column is sticky */
+    z-index: 10;
+    background: transparent; /* avoid covering content visually */
+  }
+  .grid-2x2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 12px;
+  }
+  .toggle-btn {
+    width: 100%;
   }
 </style>
 

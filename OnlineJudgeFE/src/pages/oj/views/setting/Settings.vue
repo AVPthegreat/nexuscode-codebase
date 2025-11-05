@@ -119,7 +119,7 @@
         display: block;
         width: 1px;
         height: 100%;
-        background: #dddee1;
+        background: #DDDEE1;
         position: absolute;
         top: 0;
         bottom: 0;

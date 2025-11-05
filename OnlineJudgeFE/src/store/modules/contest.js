@@ -8,6 +8,9 @@ const state = {
   access: false,
   rankLimit: 30,
   forceUpdate: false,
+  // Contest lock state
+  started: false,
+  fullscreenExitCount: 0,
   contest: {
     created_by: {},
     contest_type: CONTEST_TYPE.PUBLIC
@@ -130,6 +133,20 @@ const mutations = {
   },
   [types.NOW_ADD_1S] (state) {
     state.now = moment(state.now.add(1, 's'))
+  },
+  // Contest lock mutations
+  [types.CONTEST_SET_STARTED] (state, payload) {
+    state.started = payload.started
+    if (payload.resetCount) {
+      state.fullscreenExitCount = 0
+    }
+  },
+  [types.CONTEST_INCREMENT_FULLSCREEN_EXIT] (state) {
+    state.fullscreenExitCount += 1
+  },
+  [types.CONTEST_RESET_LOCK] (state) {
+    state.started = false
+    state.fullscreenExitCount = 0
   }
 }
 

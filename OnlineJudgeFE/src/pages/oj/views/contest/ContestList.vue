@@ -39,37 +39,45 @@
       <p id="no-contest" v-if="contests.length == 0">{{$t('m.No_contest')}}</p>
       <ol id="contest-list">
         <li v-for="contest in contests" :key="contest.title">
-          <Row type="flex" justify="space-between" align="middle">
-            <img class="trophy" src="../../../../assets/Cup.png"/>
-            <Col :span="18" class="contest-main">
-            <p class="title">
-              <a class="entry" @click.stop="goContest(contest)">
-                {{contest.title}}
-              </a>
-              <template v-if="contest.contest_type != 'Public'">
-                <Icon type="ios-locked-outline" size="20"></Icon>
-              </template>
-            </p>
-            <ul class="detail">
-              <li>
-                <Icon type="calendar" color="#3091f2"></Icon>
-                {{contest.start_time | localtime('YYYY-M-D HH:mm') }}
-              </li>
-              <li>
-                <Icon type="android-time" color="#3091f2"></Icon>
-                {{getDuration(contest.start_time, contest.end_time)}}
-              </li>
-              <li>
-                <Button size="small" shape="circle" @click="onRuleChange(contest.rule_type)">
-                  {{contest.rule_type}}
-                </Button>
-              </li>
-            </ul>
-            </Col>
-            <Col :span="4" style="text-align: center">
-            <Tag type="dot" :color="CONTEST_STATUS_REVERSE[contest.status].color">{{$t('m.' + CONTEST_STATUS_REVERSE[contest.status].name.replace(/ /g, "_"))}}</Tag>
-            </Col>
-          </Row>
+          <Card class="contest-card" :padding="12" dis-hover @click.native="goContest(contest)">
+            <Row type="flex" justify="space-between" align="top">
+              <Col :span="2" class="trophy-col">
+                <img class="trophy" src="../../../../assets/Cup.png"/>
+              </Col>
+              <Col :span="16" class="contest-main">
+                <p class="title">
+                  <a class="entry" @click.stop="goContest(contest)">
+                    {{contest.title}}
+                  </a>
+                  <template v-if="contest.contest_type != 'Public'">
+                    <Icon type="ios-locked-outline" size="20"></Icon>
+                  </template>
+                </p>
+                <ul class="detail vertical">
+                  <li>
+                    <Icon type="calendar" color="#3091f2"></Icon>
+                    {{contest.start_time | localtime('DD-MM-YYYY HH:mm') }}
+                  </li>
+                  <li>
+                    <Icon type="android-time" color="#3091f2"></Icon>
+                    {{getDuration(contest.start_time, contest.end_time)}}
+                  </li>
+                  <li>
+                    <Icon type="person" color="#3091f2"></Icon>
+                    {{ (contest.created_by && contest.created_by.username) ? contest.created_by.username : 'Unknown' }}
+                  </li>
+                  <li>
+                    <Button size="small" shape="circle" @click.stop="onRuleChange(contest.rule_type)">
+                      {{contest.rule_type}}
+                    </Button>
+                  </li>
+                </ul>
+              </Col>
+              <Col :span="6" class="status-col">
+                <Tag type="dot" :color="CONTEST_STATUS_REVERSE[contest.status].color">{{ statusLabel(contest.status) }}</Tag>
+              </Col>
+            </Row>
+          </Card>
         </li>
       </ol>
     </Panel>
@@ -134,7 +142,14 @@
       getContestList (page = 1) {
         let offset = (page - 1) * this.limit
         api.getContestList(offset, this.limit, this.query).then((res) => {
-          this.contests = res.data.data.results
+          let contests = res.data.data.results
+          // Inject dummy contests for UI/UX validation as requested
+          contests = contests.concat(this.generateDummyContests())
+          // Sort: Running (0) first, Scheduled (1) in middle, Completed (-1) last
+          this.contests = contests.sort((a, b) => {
+            const order = { '0': 0, '1': 1, '-1': 2 }
+            return (order[String(a.status)] || 999) - (order[String(b.status)] || 999)
+          })
           this.total = res.data.data.total
         })
       },
@@ -170,6 +185,42 @@
 
       getDuration (startTime, endTime) {
         return time.duration(startTime, endTime)
+      },
+      statusLabel (statusCode) {
+        // Map internal statuses to requested wording
+        // 0 -> Running, 1 -> Scheduled, -1 -> Completed
+        const map = {
+          '0': 'Running',
+          '1': 'Scheduled',
+          '-1': 'Completed'
+        }
+        return map[String(statusCode)] || 'Scheduled'
+      },
+      generateDummyContests () {
+        // Create 6 dummy contests with question id cb102 to test UI
+        const now = new Date()
+        const pad = (n) => (n < 10 ? '0' + n : '' + n)
+        const addDays = (d, days) => new Date(d.getTime() + days * 86400000)
+        const mkTime = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`
+        const statuses = ['0', '1', '-1', '1', '0', '-1']
+        const rules = ['ACM', 'OI']
+        const list = []
+        for (let i = 0; i < 6; i++) {
+          const start = addDays(now, -i)
+          const end = addDays(start, 3)
+          list.push({
+            id: `dummy-${i}`,
+            title: `CB102 Practice Contest #${i + 1}`,
+            contest_type: 'Public',
+            status: statuses[i % statuses.length],
+            start_time: mkTime(start),
+            end_time: mkTime(end),
+            rule_type: rules[i % rules.length],
+            created_by: { username: 'cb102-author' },
+            question_id: 'CB102'
+          })
+        }
+        return list
       }
     },
     computed: {
@@ -197,33 +248,103 @@
       padding: 20px;
     }
     #contest-list {
-      > li {
-        padding: 20px;
-        border-bottom: 1px solid rgba(187, 187, 187, 0.5);
-        list-style: none;
+      /* Grid layout for contest cards */
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+  grid-gap: 12px;
+      padding: 0;
 
+      @media (max-width: 1200px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      @media (max-width: 700px) {
+        grid-template-columns: 1fr;
+      }
+
+      > li {
+        list-style: none;
+        padding: 0;
+
+        .contest-card {
+          border-radius: 8px;
+          overflow: hidden;
+          cursor: pointer;
+          transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+          will-change: transform, box-shadow;
+          min-height: 150px;
+          display: flex;
+          flex-direction: column;
+
+          /deep/ .ivu-card-body {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+          }
+          /* subtle lift */
+          &:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+          }
+        }
+
+        .trophy-col {
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+        }
         .trophy {
           height: 40px;
-          margin-left: 10px;
-          margin-right: -20px;
+          margin: 4px 8px 0 0;
         }
         .contest-main {
           .title {
             font-size: 18px;
             a.entry {
               color: #495060;
+              display: -webkit-box;
+              line-clamp: 2;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
               &:hover {
                 color: #2d8cf0;
                 border-bottom: 1px solid #2d8cf0;
               }
             }
           }
-          li {
-            display: inline-block;
-            padding: 10px 0 0 10px;
-            &:first-child {
-              padding: 10px 0 0 0;
+          .detail.vertical {
+            display: block;
+            padding-top: 4px;
+            li {
+              list-style: none;
+              padding: 4px 0 0 0;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              white-space: nowrap;
             }
+          }
+        }
+        .status-col {
+          display: flex;
+          align-items: flex-start;
+          justify-content: flex-end;
+          padding-top: 4px;
+          
+          /deep/ .ivu-tag {
+            display: inline-flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 6px 14px;
+            font-size: 12px;
+            white-space: nowrap;
+            line-height: 1.2;
+            min-width: 100px;
+          }
+          
+          /deep/ .ivu-tag-dot-inner {
+            flex-shrink: 0;
+            margin-right: 8px;
           }
         }
       }

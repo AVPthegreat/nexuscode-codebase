@@ -1,7 +1,7 @@
 <template>
   <Row type="flex" :gutter="18">
     <Col :span=19>
-    <Panel shadow>
+    <Panel>
       <div slot="title">{{$t('m.Problem_List')}}</div>
       <div slot="extra">
         <ul class="filter">

@@ -43,6 +43,12 @@
   import 'codemirror/theme/monokai.css'
   import 'codemirror/theme/solarized.css'
   import 'codemirror/theme/material.css'
+  import 'codemirror/theme/gruvbox-dark.css'
+  import 'codemirror/theme/panda-syntax.css'
+  import 'codemirror/theme/dracula.css'
+  import 'codemirror/theme/eclipse.css'
+  import 'codemirror/theme/ambiance.css'
+  import 'codemirror/theme/cobalt.css'
 
   // mode
   import 'codemirror/mode/clike/clike.js'
@@ -107,7 +113,12 @@
         themes: [
           {label: this.$i18n.t('m.Monokai'), value: 'monokai'},
           {label: this.$i18n.t('m.Solarized_Light'), value: 'solarized'},
-          {label: this.$i18n.t('m.Material'), value: 'material'}
+          {label: this.$i18n.t('m.Material'), value: 'material'},
+          {label: this.$i18n.t('m.Dracula') || 'Dracula', value: 'dracula'},
+          {label: this.$i18n.t('m.Eclipse') || 'Eclipse', value: 'eclipse'},
+          {label: this.$i18n.t('m.Ambiance') || 'Ambiance', value: 'ambiance'},
+          {label: this.$i18n.t('m.Cobalt') || 'Cobalt', value: 'cobalt'},
+          {label: this.$i18n.t('m.Panda_Syntax') || 'Panda Syntax', value: 'panda-syntax'}
         ]
       }
     },

@@ -114,6 +114,14 @@ export default {
   },
   methods: {
     handleMenuSelect (routeName) {
+      // Restrict during contest lock: allow only Problems list and Submissions
+      if (this.$store.state.contest && this.$store.state.contest.started) {
+        const allowed = ['contest-problem-list', 'contest-submission-list']
+        if (!allowed.includes(routeName)) {
+          this.$Message.warning('Only Problems and Submissions are available during contest')
+          return
+        }
+      }
       // Handle menu item selection and navigate
       if (routeName.startsWith('/')) {
         // For admin routes like /acm-rank, /oi-rank, etc.
@@ -258,9 +266,12 @@ export default {
     align-items: center;
     line-height: normal;
     height: auto;
+    text-transform: uppercase; // uppercase navbar menu text
+    border-bottom: 2px solid transparent;
     &:hover {
       background: rgba(0, 0, 0, 0.04);
       color: rgba(0, 0, 0, 0.9);
+      border-bottom-color: #ffffff !important;
     }
     .ivu-icon {
       margin-right: 6px;
@@ -365,23 +376,24 @@ export default {
     .drop-menu-title {
       background: rgba(12, 18, 34, 0.8);
       border-color: rgba(255, 255, 255, 0.1);
-      color: #eee;
+      color: #ffffff !important;
       &:hover {
         background: rgba(12, 18, 34, 0.95);
+        color: #ffffff !important;
       }
     }
     :deep(.ivu-menu-item),
     :deep(.ivu-menu-submenu-title) {
-      color: rgba(255, 255, 255, 0.6);
+      color: #ffffff !important;
       &:hover {
-        background: rgba(249, 5, 5, 0.08);
-        color: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff !important;
       }
     }
     :deep(.ivu-menu-item-active),
     :deep(.ivu-menu-item-selected) {
       background: rgba(231, 138, 83, 0.2);
-      color: #e78a53;
+      color: #ffffff !important;
     }
     :deep(.ivu-select-dropdown),
     :deep(.ivu-dropdown-menu) {
@@ -389,17 +401,17 @@ export default {
       border-color: rgba(255, 255, 255, 0.1);
     }
     :deep(.ivu-dropdown-item) {
-      color: rgba(255, 255, 255, 0.8);
+      color: #ffffff !important;
       &:hover {
         background: rgba(255, 255, 255, 0.08);
-        color: rgba(255, 255, 255, 0.9);
+        color: #ffffff !important;
       }
     }
     .theme-toggle-btn {
-      color: rgba(255, 255, 255, 0.8);
+      color: #ffffff !important;
       border-color: rgba(255, 255, 255, 0.1);
       &:hover {
-        color: rgba(255, 255, 255, 0.9);
+        color: #ffffff !important;
         border-color: rgba(255, 255, 255, 0.2);
       }
     }
@@ -425,4 +437,40 @@ export default {
     }
   }
 }
+
+/* Force uppercase for all contest navbar menu items */
+#contest-navbar .ivu-menu-item,
+#contest-navbar .ivu-menu-submenu-title {
+  text-transform: uppercase !important;
+}
+
+/* Force white text in dark mode for contest navbar */
+.dark-mode #contest-navbar .ivu-menu-item,
+.dark-mode #contest-navbar .ivu-menu-submenu-title,
+.dark-mode #contest-navbar .ivu-menu-item span,
+.dark-mode #contest-navbar .ivu-menu-submenu-title span,
+.dark-mode #contest-navbar .drop-menu-title,
+.dark-mode #contest-navbar .drop-menu-title span,
+.dark-mode #contest-navbar .ivu-dropdown-item,
+.dark-mode #contest-navbar .theme-toggle-btn,
+.dark-mode #contest-navbar .ivu-menu-item *,
+.dark-mode #contest-navbar .ivu-menu-submenu-title *,
+.dark-mode #contest-navbar .ivu-icon {
+  color: #ffffff !important;
+}
+
+/* Override iView's default #BFC3CA color in dark mode */
+.dark-mode #contest-navbar * {
+  color: #ffffff !important;
+}
+
+.dark-mode #contest-navbar .ivu-menu {
+  color: #ffffff !important;
+}
+
+.dark-mode #contest-navbar .ivu-menu-dark .ivu-menu-item,
+.dark-mode #contest-navbar .ivu-menu-dark .ivu-menu-submenu-title {
+  color: #ffffff !important;
+}
 </style>
+
