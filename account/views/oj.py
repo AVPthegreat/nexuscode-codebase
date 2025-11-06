@@ -244,11 +244,14 @@ class UserRegisterAPI(APIView):
             except Exception:
                 # fallback simple html
                 email_html = f"<p>Hello {user.username}, click <a href='{verify_link}'>here</a> to verify your email.</p>"
-            send_email_async.send(from_name=SysOptions.website_name_shortcut,
-                                  to_email=user.email,
-                                  to_name=user.username,
-                                  subject="Verify your email",
-                                  content=email_html)
+            # Synchronous send for reliability (removed async broker dependency)
+            from utils.shortcuts import send_email as send_email_sync
+            send_email_sync(smtp_config=SysOptions.smtp_config,
+                            from_name=SysOptions.website_name_shortcut,
+                            to_email=user.email,
+                            to_name=user.username,
+                            subject="Verify your email",
+                            content=email_html)
         return self.success("Succeeded")
 
 

@@ -12,11 +12,13 @@ class Command(BaseCommand):
         parser.add_argument("--contest-id", type=int, help="Send for a specific contest id")
         parser.add_argument("--dry-run", action="store_true", help="Only print counts; do not send emails")
         parser.add_argument("--resend", action="store_true", help="Ignore results_emailed_at guard and resend")
+        parser.add_argument("--user-id", type=int, help="Restrict sending to a single user id (for targeted testing)")
 
     def handle(self, *args, **options):
         contest_id = options.get("contest_id")
         dry_run = options.get("dry_run")
         resend = options.get("resend")
+        user_id = options.get("user_id")
 
         if contest_id:
             contests = Contest.objects.filter(id=contest_id)
@@ -29,7 +31,10 @@ class Command(BaseCommand):
         processed_contests = 0
 
         for contest in contests:
-            attempts = ContestAttempt.objects.filter(contest=contest, started=True).select_related("user")
+            attempts_qs = ContestAttempt.objects.filter(contest=contest, started=True).select_related("user")
+            if user_id:
+                attempts_qs = attempts_qs.filter(user_id=user_id)
+            attempts = attempts_qs
             if not attempts.exists():
                 self.stdout.write(self.style.WARNING(f"Contest {contest.id} has no attempts; skipping"))
                 if not resend and contest.results_emailed_at is None:
@@ -37,7 +42,8 @@ class Command(BaseCommand):
                     contest.save(update_fields=["results_emailed_at"])
                 continue
 
-            self.stdout.write(f"Processing contest {contest.id} - {contest.title}: {attempts.count()} attempts")
+            scope_info = f" (filtered to user {user_id})" if user_id else ""
+            self.stdout.write(f"Processing contest {contest.id} - {contest.title}: {attempts.count()} attempts{scope_info}")
 
             sent = 0
             for attempt in attempts:
