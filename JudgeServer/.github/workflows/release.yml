@@ -51,3 +51,9 @@ jobs:
         platforms: linux/amd64,linux/arm64
         tags: ${{ steps.metadata.outputs.tags }}
         annotations: ${{ steps.metadata.outputs.annotations }}
+
+    - name: Run server
+      run: |
+        cd OnlineJudge
+        source .venv/bin/activate
+        ./manage.py runserver 0.0.0.0:8001

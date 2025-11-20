@@ -150,6 +150,9 @@
         <el-form-item style="margin-top: 20px" :label="$t('m.Hint')">
           <Simditor v-model="problem.hint" placeholder=""></Simditor>
         </el-form-item>
+        <el-form-item :label="$t('m.Editorial')">
+          <Simditor v-model="problem.editorial" placeholder=""></Simditor>
+        </el-form-item>
         <el-form-item :label="$t('m.Code_Template')">
           <el-row>
             <el-col :span="24" v-for="(v, k) in template" :key="'template'+k">
@@ -345,6 +348,7 @@
           test_case_score: [],
           rule_type: 'ACM',
           hint: '',
+          editorial: '',
           source: '',
           io_mode: {'io_mode': 'Standard IO', 'input': 'input.txt', 'output': 'output.txt'}
         }
