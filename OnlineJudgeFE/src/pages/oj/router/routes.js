@@ -102,11 +102,11 @@ export default [
         path: 'problem/:problemID/',
         component: Problem
       },
-      {
-        name: 'contest-announcement-list',
-        path: 'announcements',
-        component: Announcements
-      },
+      // {
+      //   name: 'contest-announcement-list',
+      //   path: 'announcements',
+      //   component: Announcements
+      // },
       {
         name: 'contest-rank',
         path: 'rank',

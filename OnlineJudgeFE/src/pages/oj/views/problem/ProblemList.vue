@@ -1,73 +1,78 @@
 <template>
-  <Row type="flex" :gutter="18">
-    <Col :span=19>
-    <Panel>
-      <div slot="title">{{$t('m.Problem_List')}}</div>
-      <div slot="extra">
-        <ul class="filter">
-          <li>
-            <Dropdown @on-click="filterByDifficulty">
-              <span>{{query.difficulty === '' ? this.$i18n.t('m.Difficulty') : this.$i18n.t('m.' + query.difficulty)}}
+  <Row type="flex" :gutter="24">
+    <Col :span="18">
+      <Card :padding="0" class="problem-list-card">
+        <div slot="title" class="panel-header">
+          <div class="title-text">{{$t('m.Problem_List')}}</div>
+          <div class="filter-group">
+            <Input v-model="query.keyword"
+                   @on-enter="filterByKeyword"
+                   placeholder="Search problems..."
+                   icon="ios-search"
+                   class="search-input"/>
+            
+            <Dropdown @on-click="filterByDifficulty" trigger="click" class="filter-dropdown">
+              <Button type="ghost" class="filter-btn">
+                {{query.difficulty === '' ? $t('m.Difficulty') : $t('m.' + query.difficulty)}}
                 <Icon type="arrow-down-b"></Icon>
-              </span>
+              </Button>
               <Dropdown-menu slot="list">
                 <Dropdown-item name="">{{$t('m.All')}}</Dropdown-item>
                 <Dropdown-item name="Low">{{$t('m.Low')}}</Dropdown-item>
-                <Dropdown-item name="Mid" >{{$t('m.Mid')}}</Dropdown-item>
+                <Dropdown-item name="Mid">{{$t('m.Mid')}}</Dropdown-item>
                 <Dropdown-item name="High">{{$t('m.High')}}</Dropdown-item>
               </Dropdown-menu>
             </Dropdown>
-          </li>
-          <li>
-            <i-switch size="large" @on-change="handleTagsVisible">
+
+            <i-switch size="default" @on-change="handleTagsVisible" class="tag-switch">
               <span slot="open">{{$t('m.Tags')}}</span>
               <span slot="close">{{$t('m.Tags')}}</span>
             </i-switch>
-          </li>
-          <li>
-            <Input v-model="query.keyword"
-                   @on-enter="filterByKeyword"
-                   @on-click="filterByKeyword"
-                   placeholder="keyword"
-                   icon="ios-search-strong"/>
-          </li>
-          <li>
-            <Button type="info" @click="onReset">
-              <Icon type="refresh"></Icon>
-              {{$t('m.Reset')}}
-            </Button>
-          </li>
-        </ul>
-      </div>
-      <Table style="width: 100%; font-size: 16px;"
-             :columns="problemTableColumns"
-             :data="problemList"
-             :loading="loadings.table"
-             disabled-hover></Table>
-    </Panel>
-    <Pagination
-      :total="total" :page-size.sync="query.limit" @on-change="pushRouter" @on-page-size-change="pushRouter" :current.sync="query.page" :show-sizer="true"></Pagination>
 
+            <Button type="text" @click="onReset" class="reset-btn">
+              <Icon type="refresh"></Icon>
+            </Button>
+          </div>
+        </div>
+        
+        <Table :columns="problemTableColumns"
+               :data="problemList"
+               :loading="loadings.table"
+               class="problem-table"
+               disabled-hover></Table>
+               
+        <div class="pagination-wrapper">
+          <Pagination :total="total" 
+                      :page-size.sync="query.limit" 
+                      @on-change="pushRouter" 
+                      @on-page-size-change="pushRouter" 
+                      :current.sync="query.page" 
+                      :show-sizer="true"></Pagination>
+        </div>
+      </Card>
     </Col>
 
-    <Col :span="5">
-    <Panel :padding="10">
-      <div slot="title" class="taglist-title">{{$t('m.Tags')}}</div>
-      <Button v-for="tag in tagList"
-              :key="tag.name"
-              @click="filterByTag(tag.name)"
-              type="ghost"
-              :disabled="query.tag === tag.name"
-              shape="circle"
-              class="tag-btn">{{tag.name}}
-      </Button>
-
-      <Button long id="pick-one" @click="pickone">
-        <Icon type="shuffle"></Icon>
-        {{$t('m.Pick_One')}}
-      </Button>
-    </Panel>
-    <Spin v-if="loadings.tag" fix size="large"></Spin>
+    <Col :span="6">
+      <Card :padding="20" class="sidebar-card">
+        <div slot="title" class="sidebar-title">{{$t('m.Tags')}}</div>
+        <div class="tag-list">
+          <Button v-for="tag in tagList"
+                  :key="tag.name"
+                  @click="filterByTag(tag.name)"
+                  type="ghost"
+                  :class="{'active': query.tag === tag.name}"
+                  size="small"
+                  class="tag-btn">{{tag.name}}
+          </Button>
+        </div>
+        
+        <div class="sidebar-divider"></div>
+        
+        <Button type="primary" long size="large" @click="pickone" class="pick-one-btn">
+          <Icon type="shuffle"></Icon>
+          {{$t('m.Pick_One')}}
+        </Button>
+      </Card>
     </Col>
   </Row>
 </template>
@@ -94,65 +99,60 @@
             key: '_id',
             width: 80,
             render: (h, params) => {
-              return h('Button', {
-                props: {
-                  type: 'text',
-                  size: 'large'
-                },
-                on: {
-                  click: () => {
-                    this.$router.push({name: 'problem-details', params: {problemID: params.row._id}})
-                  }
-                },
+              return h('span', {
                 style: {
-                  padding: '2px 0'
+                  color: 'var(--nexus-text-secondary)',
+                  fontWeight: '600'
                 }
               }, params.row._id)
             }
           },
           {
             title: this.$i18n.t('m.Title'),
-            width: 400,
+            minWidth: 200,
             render: (h, params) => {
-              return h('Button', {
-                props: {
-                  type: 'text',
-                  size: 'large'
+              return h('a', {
+                style: {
+                  fontWeight: '600',
+                  fontSize: '15px',
+                  color: 'var(--nexus-text-primary)'
                 },
                 on: {
                   click: () => {
                     this.$router.push({name: 'problem-details', params: {problemID: params.row._id}})
                   }
-                },
-                style: {
-                  padding: '2px 0',
-                  overflowX: 'auto',
-                  textAlign: 'left',
-                  width: '100%'
                 }
               }, params.row.title)
             }
           },
           {
             title: this.$i18n.t('m.Level'),
+            width: 120,
             render: (h, params) => {
               let t = params.row.difficulty
-              let color = 'blue'
-              if (t === 'Low') color = 'green'
-              else if (t === 'High') color = 'yellow'
-              return h('Tag', {
-                props: {
-                  color: color
+              let color = 'var(--nexus-info)'
+              if (t === 'Low') color = 'var(--nexus-secondary)'
+              else if (t === 'High') color = 'var(--nexus-accent)'
+              
+              return h('span', {
+                style: {
+                  color: color,
+                  fontWeight: '600',
+                  fontSize: '12px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px'
                 }
               }, this.$i18n.t('m.' + params.row.difficulty))
             }
           },
           {
             title: this.$i18n.t('m.Total'),
-            key: 'submission_number'
+            key: 'submission_number',
+            width: 100
           },
           {
             title: this.$i18n.t('m.AC_Rate'),
+            width: 120,
             render: (h, params) => {
               return h('span', this.getACRate(params.row.accepted_number, params.row.submission_number))
             }
@@ -242,15 +242,26 @@
           this.problemTableColumns.push(
             {
               title: this.$i18n.t('m.Tags'),
-              align: 'center',
+              align: 'left',
+              minWidth: 200,
               render: (h, params) => {
                 let tags = []
                 params.row.tags.forEach(tag => {
-                  tags.push(h('Tag', {}, tag))
+                  tags.push(h('Tag', {
+                    props: {
+                      color: 'default'
+                    },
+                    style: {
+                      marginRight: '4px',
+                      marginBottom: '4px'
+                    }
+                  }, tag))
                 })
                 return h('div', {
                   style: {
-                    margin: '8px 0'
+                    margin: '8px 0',
+                    display: 'flex',
+                    flexWrap: 'wrap'
                   }
                 }, tags)
               }
@@ -288,17 +299,107 @@
 </script>
 
 <style scoped lang="less">
-  .taglist-title {
-    margin-left: -10px;
-    margin-bottom: -10px;
-  }
+  .problem-list-card {
+    overflow: hidden;
+    
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--nexus-border);
+      
+      .title-text {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--nexus-text-primary);
+      }
+      
+      .filter-group {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        
+        .search-input {
+          width: 200px;
+        }
+        
+        .filter-btn {
+          color: var(--nexus-text-secondary);
+          &:hover {
+            color: var(--nexus-primary);
+          }
+        }
+        
+        .reset-btn {
+          color: var(--nexus-text-secondary);
+          &:hover {
+            color: var(--nexus-primary);
+          }
+        }
+      }
+    }
 
-  .tag-btn {
-    margin-right: 5px;
-    margin-bottom: 10px;
+    /deep/ .ivu-table-row {
+      cursor: pointer;
+    }
+    
+    .pagination-wrapper {
+      padding: 20px;
+      display: flex;
+      justify-content: flex-end;
+    }
   }
-
-  #pick-one {
-    margin-top: 10px;
+  
+  .sidebar-card {
+    .sidebar-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--nexus-text-primary);
+      margin-bottom: 16px;
+    }
+    
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      
+      .tag-btn {
+        margin: 0;
+        border: 1px solid var(--nexus-border);
+        color: var(--nexus-text-secondary);
+        
+        &:hover, &.active {
+          border-color: var(--nexus-primary);
+          color: var(--nexus-primary);
+          background: rgba(79, 70, 229, 0.05);
+        }
+      }
+    }
+    
+    .tag-switch {
+      margin-left: 10px;
+      width: 90px;
+      /deep/ .ivu-switch {
+        width: 90px !important;
+        &:after {
+          left: 2px;
+        }
+        &.ivu-switch-checked:after {
+          left: 68px;
+        }
+      }
+    }
+    
+    .sidebar-divider {
+      height: 1px;
+      background: var(--nexus-border);
+      margin: 20px 0;
+    }
+    
+    .pick-one-btn {
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
   }
 </style>

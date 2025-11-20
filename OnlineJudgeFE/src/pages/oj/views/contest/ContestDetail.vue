@@ -110,7 +110,7 @@
               return h('Tag', { props: { color } }, text)
             }
           },
-          { title: 'Attempts', key: 'attempts', width: 100, align: 'center' },
+          { title: 'Total Submissions', key: 'attempts', width: 140, align: 'center' },
           { title: 'Score', key: 'score', width: 100, align: 'center' }
         ],
         overviewRows: [],
@@ -136,9 +136,16 @@
         }
       })
       this.loadOverview()
+      // Auto-refresh overview every 30 seconds
+      this.overviewTimer = setInterval(() => {
+        if (this.contestStarted) {
+          this.loadOverview(true)
+        }
+      }, 30000)
     },
     beforeDestroy () {
       clearInterval(this.timer)
+      clearInterval(this.overviewTimer)
       document.removeEventListener('fullscreenchange', this.onFullscreenChange)
       this.$store.commit(types.CLEAR_CONTEST)
     },
@@ -292,8 +299,10 @@
           })
         }
       },
-      loadOverview () {
-        this.overviewLoading = true
+      loadOverview (silent = false) {
+        if (!silent) {
+          this.overviewLoading = true
+        }
         this.$store.dispatch('loadContestOverview').then(res => {
           const attempt = res.data.data
           if (attempt) {
@@ -303,7 +312,9 @@
             this.overviewRows = []
           }
           this.overviewLoading = false
-        }).catch(() => { this.overviewLoading = false })
+        }).catch(() => { 
+          this.overviewLoading = false 
+        })
       },
       checkPassword () {
         if (this.contestPassword === '') {

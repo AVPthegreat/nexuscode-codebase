@@ -311,10 +311,36 @@
         document.documentElement.style.overflow = 'auto'
         document.body.style.overflow = 'auto'
       }
+      
+      // Set default editor theme based on global theme
+      this.updateThemeFromGlobal()
+      
+      // Listen for theme changes
+      this.themeObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.attributeName === 'class') {
+            this.updateThemeFromGlobal()
+          }
+        })
+      })
+      this.themeObserver.observe(document.body, { attributes: true })
+      
       this.init()
+    },
+    beforeDestroy () {
+      if (this.themeObserver) {
+        this.themeObserver.disconnect()
+      }
     },
     methods: {
       ...mapActions(['changeDomTitle']),
+      updateThemeFromGlobal () {
+        if (document.body.classList.contains('dark-mode')) {
+          this.theme = 'material'
+        } else {
+          this.theme = 'solarized'
+        }
+      },
       handleViewOverview () {
         this.$router.push({ name: 'contest-details', params: { contestID: this.contestID } })
       },
@@ -670,13 +696,14 @@
     }
   }
 
-  #problem-content {
+    #problem-content {
     margin-top: -50px;
     .title {
-      font-size: 20px;
-      font-weight: 400;
+      font-size: 14px;
+      font-weight: 700;
       margin: 25px 0 8px 0;
-      color: #3091f2;
+      color: var(--nexus-primary);
+      text-transform: uppercase;
       .copy {
         padding-left: 8px;
       }

@@ -114,4 +114,7 @@
 </script>
 
 <style scoped lang="less">
+  /deep/ .ivu-table-row {
+    cursor: pointer;
+  }
 </style>

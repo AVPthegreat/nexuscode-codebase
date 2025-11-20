@@ -36,7 +36,9 @@
           </ul>
         </div>
         <Table stripe :disabled-hover="true" :columns="columns" :data="submissions" :loading="loadingTable"></Table>
-        <Pagination :total="total" :page-size="limit" @on-change="changeRoute" :current.sync="page"></Pagination>
+        <div class="pagination-wrapper">
+          <Pagination :total="total" :page-size="limit" @on-change="changeRoute" :current.sync="page"></Pagination>
+        </div>
       </Panel>
     </div>
   </div>
@@ -349,5 +351,11 @@
       flex: none;
       width: 210px;
     }
+  }
+  
+  .pagination-wrapper {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
   }
 </style>

@@ -1,0 +1,295 @@
+:root {
+  /* Brand Colors */
+  --nexus-primary: #4F46E5;
+  --nexus-primary-hover: #4338ca;
+  --nexus-secondary: #10B981;
+  --nexus-accent: #F59E0B;
+  --nexus-danger: #EF4444;
+  --nexus-info: #3B82F6;
+
+  /* Backgrounds */
+  --nexus-bg: #F3F4F6;
+  --nexus-surface: #FFFFFF;
+  --nexus-surface-hover: #F9FAFB;
+  --nexus-surface-active: #F3F4F6;
+
+  /* Text */
+  --nexus-text-primary: #111827;
+  --nexus-text-secondary: #4B5563;
+  --nexus-text-disabled: #9CA3AF;
+  --nexus-text-inverse: #FFFFFF;
+
+  /* Borders */
+  --nexus-border: #E5E7EB;
+  --nexus-border-hover: #D1D5DB;
+
+  /* Shadows */
+  --nexus-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --nexus-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --nexus-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --nexus-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  /* Radius */
+  --nexus-radius-sm: 0.25rem;
+  --nexus-radius: 0.5rem;
+  --nexus-radius-lg: 0.75rem;
+  --nexus-radius-full: 9999px;
+
+  /* Transitions */
+  --nexus-transition: all 0.2s ease-in-out;
+}
+
+.dark-mode {
+  /* Brand Colors - Adjusted for Dark Mode */
+  --nexus-primary: #6366F1;
+  --nexus-primary-hover: #818CF8;
+  --nexus-secondary: #34D399;
+  --nexus-accent: #FBBF24;
+  --nexus-danger: #F87171;
+  --nexus-info: #60A5FA;
+
+  /* Backgrounds */
+  --nexus-bg: #0F172A;
+  --nexus-surface: #1E293B;
+  --nexus-surface-hover: #334155;
+  --nexus-surface-active: #1E293B;
+
+  /* Text */
+  --nexus-text-primary: #F9FAFB;
+  --nexus-text-secondary: #9CA3AF;
+  --nexus-text-disabled: #6B7280;
+  --nexus-text-inverse: #111827;
+
+  /* Borders */
+  --nexus-border: #374151;
+  --nexus-border-hover: #4B5563;
+
+  /* Shadows */
+  --nexus-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --nexus-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  --nexus-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --nexus-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+/* Global Resets & Typography */
+body {
+  background-color: var(--nexus-bg);
+  color: var(--nexus-text-primary);
+  font-family: 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Common Component Overrides using Variables */
+
+/* Cards */
+.ivu-card {
+  background-color: var(--nexus-surface) !important;
+  border: 1px solid var(--nexus-border) !important;
+  border-radius: var(--nexus-radius-lg) !important;
+  box-shadow: var(--nexus-shadow-sm);
+  transition: var(--nexus-transition);
+}
+
+.ivu-card:hover {
+  box-shadow: var(--nexus-shadow-md);
+  border-color: var(--nexus-border-hover) !important;
+}
+
+.ivu-card-head {
+  border-bottom: 1px solid var(--nexus-border) !important;
+  padding: 16px 24px !important;
+}
+
+.ivu-card-body {
+  padding: 24px !important;
+}
+
+/* Buttons */
+.ivu-btn {
+  border-radius: var(--nexus-radius) !important;
+  font-weight: 500 !important;
+  transition: var(--nexus-transition) !important;
+  height: 36px !important;
+}
+
+.ivu-btn-primary {
+  background-color: var(--nexus-primary) !important;
+  border-color: var(--nexus-primary) !important;
+}
+
+.ivu-btn-primary:hover {
+  background-color: var(--nexus-primary-hover) !important;
+  border-color: var(--nexus-primary-hover) !important;
+}
+
+.ivu-btn-ghost {
+  color: var(--nexus-text-primary) !important;
+  border-color: var(--nexus-border) !important;
+}
+
+.ivu-btn-ghost:hover {
+  color: var(--nexus-primary) !important;
+  border-color: var(--nexus-primary) !important;
+  background-color: transparent !important;
+}
+
+/* Inputs */
+.ivu-input {
+  background-color: var(--nexus-surface) !important;
+  border-color: var(--nexus-border) !important;
+  color: var(--nexus-text-primary) !important;
+  border-radius: var(--nexus-radius) !important;
+  height: 36px !important;
+}
+
+.ivu-input:hover, .ivu-input:focus {
+  border-color: var(--nexus-primary) !important;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1) !important;
+}
+
+/* Tables */
+.ivu-table-wrapper {
+  border: none !important;
+  border-radius: var(--nexus-radius-lg) !important;
+  overflow: hidden;
+  box-shadow: var(--nexus-shadow-sm);
+}
+
+.dark-mode .ivu-table-wrapper {
+  box-shadow: none !important;
+  border: 1px solid var(--nexus-border) !important;
+}
+
+.ivu-table {
+  background-color: var(--nexus-surface) !important;
+  color: var(--nexus-text-primary) !important;
+}
+
+.ivu-table:before, .ivu-table:after {
+  background-color: transparent !important;
+}
+
+.ivu-table th {
+  background-color: var(--nexus-surface-hover) !important;
+  color: var(--nexus-text-secondary) !important;
+  font-weight: 600 !important;
+  border-bottom: 1px solid var(--nexus-border) !important;
+}
+
+.ivu-table td {
+  background-color: var(--nexus-surface) !important;
+  color: var(--nexus-text-primary) !important;
+  border-bottom: 1px solid var(--nexus-border) !important;
+}
+
+.ivu-table-row-hover td {
+  background-color: var(--nexus-surface-hover) !important;
+}
+
+/* Menu */
+.ivu-menu-light {
+  background: transparent !important;
+}
+
+.ivu-menu-horizontal.ivu-menu-light:after {
+  display: none !important;
+}
+
+/* Navbar Dark Mode Overrides */
+.dark-mode #header .ivu-menu-item,
+.dark-mode #header .ivu-menu-submenu-title,
+.dark-mode #header .drop-menu-title {
+  color: #FFFFFF !important;
+}
+
+/* Global Navbar Uppercase */
+#header .ivu-menu-item,
+#header .ivu-menu-submenu-title,
+#header .drop-menu-title {
+  text-transform: uppercase !important;
+}
+
+.dark-mode #header .ivu-menu-item:hover,
+.dark-mode #header .ivu-menu-submenu-title:hover {
+  color: var(--nexus-primary) !important;
+}
+
+/* Code Blocks in Dark Mode */
+.dark-mode pre, .dark-mode code, .dark-mode .markdown-body pre, .dark-mode .markdown-body code {
+  background-color: #2d2d2d !important;
+  color: #e0e0e0 !important;
+  border-color: #444 !important;
+}
+
+/* Modal Text */
+.ivu-modal-body, .ivu-modal-confirm-body {
+  color: var(--nexus-text-primary) !important;
+}
+
+/* Modal */
+.ivu-modal-content {
+  border-radius: var(--nexus-radius-lg) !important;
+  box-shadow: var(--nexus-shadow-lg) !important;
+}
+
+.dark-mode .ivu-modal-content {
+  background-color: var(--nexus-surface) !important;
+  border: 1px solid var(--nexus-border) !important;
+}
+
+.ivu-modal-header {
+  border-bottom: 1px solid var(--nexus-border) !important;
+  padding: 16px 24px !important;
+  color: var(--nexus-text-primary) !important;
+}
+
+/* Pagination */
+.ivu-page-item {
+  background-color: var(--nexus-surface) !important;
+  border-color: var(--nexus-border) !important;
+  border-radius: var(--nexus-radius) !important;
+}
+
+.ivu-page-item a {
+  color: var(--nexus-text-primary) !important;
+}
+
+.ivu-page-item-active {
+  background-color: var(--nexus-primary) !important;
+  border-color: var(--nexus-primary) !important;
+}
+
+.ivu-page-item-active a {
+  color: var(--nexus-text-inverse) !important;
+}
+
+/* Tags */
+.ivu-tag {
+  border-radius: var(--nexus-radius-sm) !important;
+  border: none !important;
+}
+
+/* Alerts */
+.ivu-alert {
+  border-radius: var(--nexus-radius) !important;
+}
+
+.ivu-alert-info {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+  border: 1px solid rgba(59, 130, 246, 0.2) !important;
+}
+
+.ivu-alert-success {
+  background-color: rgba(16, 185, 129, 0.1) !important;
+  border: 1px solid rgba(16, 185, 129, 0.2) !important;
+}
+
+.ivu-alert-warning {
+  background-color: rgba(245, 158, 11, 0.1) !important;
+  border: 1px solid rgba(245, 158, 11, 0.2) !important;
+}
+
+.ivu-alert-error {
+  background-color: rgba(239, 68, 68, 0.1) !important;
+  border: 1px solid rgba(239, 68, 68, 0.2) !important;
+}

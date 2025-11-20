@@ -121,6 +121,14 @@
             }
           },
           {
+            title: this.$i18n.t('m.Score'),
+            align: 'center',
+            width: 100,
+            render: (h, params) => {
+              return h('span', params.row.total_score)
+            }
+          },
+          {
             title: this.$i18n.t('m.TotalTime'),
             align: 'center',
             width: 100,
@@ -254,19 +262,23 @@
         dataRank.forEach((rank, i) => {
           let info = rank.submission_info
           let cellClass = {}
+          let totalScore = 0
           Object.keys(info).forEach(problemID => {
             dataRank[i][problemID] = info[problemID]
             dataRank[i][problemID].ac_time = time.secondFormat(dataRank[i][problemID].ac_time)
             let status = info[problemID]
             if (status.is_first_ac) {
               cellClass[problemID] = 'first-ac'
+              totalScore += 100
             } else if (status.is_ac) {
               cellClass[problemID] = 'ac'
+              totalScore += 100
             } else {
               cellClass[problemID] = 'wa'
             }
           })
           dataRank[i].cellClassName = cellClass
+          dataRank[i].total_score = totalScore
         })
         this.dataRank = dataRank
       },
@@ -276,7 +288,7 @@
           this.columns.push({
             align: 'center',
             key: problem.id,
-            width: problems.length > 15 ? 80 : null,
+            minWidth: 150, // Ensure minimum width for scrolling
             renderHeader: (h, params) => {
               return h('a', {
                 'class': {
@@ -298,7 +310,7 @@
             render: (h, params) => {
               if (params.row[problem.id]) {
                 let status = params.row[problem.id]
-                let acTime, errorNumber
+                let acTime, errorNumber, score
                 
                 // Check if this submission should be frozen
                 if (this.isFrozen && !this.isContestAdmin && status.is_after_freeze) {
@@ -319,11 +331,13 @@
                 
                 if (status.is_ac) {
                   acTime = h('span', status.ac_time)
+                  // Show score if available or assume 100 for AC
+                  score = h('div', { style: { fontSize: '12px', color: '#19be6b' } }, '100')
                 }
                 if (status.error_number !== 0) {
                   errorNumber = h('p', '(-' + status.error_number + ')')
                 }
-                return h('div', [acTime, errorNumber])
+                return h('div', [acTime, score, errorNumber])
               }
             }
           })
