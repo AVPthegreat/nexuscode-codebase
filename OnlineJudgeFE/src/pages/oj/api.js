@@ -61,7 +61,7 @@ export default {
   },
   getSubmissionHeatmap (username) {
     return ajax('submission_heatmap', 'get', {
-      data: {
+      params: {
         username
       }
     })

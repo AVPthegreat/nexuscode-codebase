@@ -173,7 +173,7 @@ class ProblemHintAPI(APIView):
 class DailyChallengeAPI(APIView):
     def get(self, request):
         from django.utils import timezone
-        from .models import DailyChallenge
+        from ..models import DailyChallenge
         import random
         
         today = timezone.now().date()
