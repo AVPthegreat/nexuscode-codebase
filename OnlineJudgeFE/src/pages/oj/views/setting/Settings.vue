@@ -16,6 +16,9 @@
         <div :class="['nav-item', { active: isRoute('security-setting') }]" @click="goRoute('/setting/security')">
           <Icon type="ios-locked-outline"></Icon> Security
         </div>
+        <div class="nav-item" v-if="isAdminRole" @click="goToAdmin">
+          <Icon type="ios-settings-strong"></Icon> Admin Panel
+        </div>
         <div class="nav-item logout" @click="handleLogout">
           <Icon type="log-out"></Icon> Logout
         </div>
@@ -123,10 +126,13 @@ export default {
       if (!url) return ''
       const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url
       return cleanUrl.split('/').pop()
+    },
+    goToAdmin() {
+      window.open('/admin/')
     }
   },
   computed: {
-    ...mapGetters(['user', 'profile']),
+    ...mapGetters(['user', 'profile', 'isAdminRole']),
     level() {
       if (!this.profile.xp) return 1
       return Math.floor(Math.sqrt(this.profile.xp / 10)) + 1

@@ -15,6 +15,9 @@
         <div class="nav-item" @click="goToSecurity">
           <Icon type="ios-locked-outline"></Icon> Security
         </div>
+        <div class="nav-item" v-if="isAdminRole" @click="goToAdmin">
+          <Icon type="ios-settings-strong"></Icon> Admin Panel
+        </div>
         <div class="nav-item logout" @click="handleLogout">
           <Icon type="log-out"></Icon> Logout
         </div>
@@ -178,7 +181,7 @@
               </div>
               <div class="sub-meta">
                 <span :class="['status-text', getStatusClass(submission.result)]">{{ getStatusText(submission.result)
-                  }}</span>
+                }}</span>
                 <!-- <span class="separator">•</span> -->
                 <span class="sub-lang">{{ submission.language }}</span>
                 <!-- <span class="separator">•</span> -->
@@ -252,7 +255,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import time from '@/utils/time'
 import api from '@oj/api'
 import SubmissionHeatmap from '@oj/components/SubmissionHeatmap.vue'
@@ -449,9 +452,13 @@ export default {
       if (!url) return ''
       const cleanUrl = url.endsWith('/') ? url.slice(0, -1) : url
       return cleanUrl.split('/').pop()
+    },
+    goToAdmin() {
+      window.open('/admin/')
     }
   },
   computed: {
+    ...mapGetters(['user', 'isAdminRole']),
     refreshVisible() {
       if (!this.username) return true
       if (this.username && this.username === this.$store.getters.user.username) return true
@@ -527,10 +534,13 @@ export default {
   // border-top: 1px solid #a0a6b2;
 
   .nav-content {
-    width: 100%;
+    position: sticky;
+    // margin-bottom: 320px;
+
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 32px;
+    width: 100%;
     display: flex;
     gap: 8px;
 
