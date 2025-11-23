@@ -247,4 +247,4 @@ IP_HEADER = "HTTP_X_REAL_IP"
 
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
-GEMINI_API_KEY = get_env("GEMINI_API_KEY", "AIzaSyDfs94lddRzK1UnsYcq0Ksb_69rCGmo-lI")
+# GEMINI_API_KEY = get_env("GEMINI_API_KEY", "...")
