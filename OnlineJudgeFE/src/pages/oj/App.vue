@@ -119,10 +119,10 @@ a {
 
 .content-app {
   padding-top: 100px;
-  padding-left: 20px;
-  padding-right: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding-left: 0;
+  padding-right: 0;
+  width: 100%;
+  margin: 0;
   min-height: calc(100vh - 150px);
 }
 

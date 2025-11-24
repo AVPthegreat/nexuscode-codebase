@@ -181,7 +181,7 @@
               </div>
               <div class="sub-meta">
                 <span :class="['status-text', getStatusClass(submission.result)]">{{ getStatusText(submission.result)
-                }}</span>
+                  }}</span>
                 <!-- <span class="separator">•</span> -->
                 <span class="sub-lang">{{ submission.language }}</span>
                 <!-- <span class="separator">•</span> -->
